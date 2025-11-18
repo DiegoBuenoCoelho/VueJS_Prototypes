@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>QUIZ</title>
+		<script src="https://unpkg.com/vue@3"></script>
+		<style type="text/css">
+			body {
+				font-family: Verdana, Geneva, Tahoma, sans-serif;
+			}
+			#app {
+				display: flex;
+				flex-direction: column;
+				gap: 1em;
+			}
+			.pergunta {
+				margin: 1em 1em 1em 2em;
+				font-weight: 600;
+				color: blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<label>Your Score: <span>{{score}}</span></label>
+			<label
+				v-if="currentStep <= 2"
+				:class="{'pergunta' : true}"
+			>
+				{{arQuestions[currentStep]}}</label
+			>
+			<label
+				v-if="currentStep > 2"
+				:class="{'fim' : true}"
+				>FINISHED</label
+			>
+			<input
+				v-if="currentStep < 3"
+				type="text"
+				name=""
+				id=""
+				v-model="currentAnswer"
+				@keyup.enter="onSubmitAnswer"
+			/>
+			<button
+				v-if="currentStep < 3"
+				@click="onSubmitAnswer"
+			>
+				Submit Answer
+			</button>
+			<button
+				v-if="currentStep > 2"
+				@click="onRestart"
+			>
+				RESTART
+			</button>
+		</div>
+		<script>
+			const { createApp, ref } = Vue;
+			createApp({
+				setup() {
+					const arQuestions = [
+						"Qual melhor time?",
+						"Qual melhor cachorro?",
+						"Qual maior ladrao?",
+					];
+					const arAnswersCorrect = ["Fluminense", "Chewbacca", "Lula"];
+					let score = ref(0);
+					let currentStep = ref(0);
+					let currentAnswer = ref("");
+
+					const onSubmitAnswer = (e) => {
+						e.preventDefault();
+						console.log(
+							`[onSubmitAnswer]`,
+							currentAnswer.value,
+							currentStep.value,
+							arAnswersCorrect[currentStep.value]
+						);
+
+						if (currentAnswer.value === arAnswersCorrect[currentStep.value]) {
+							score.value++;
+						}
+
+						currentAnswer.value = "";
+						currentStep.value++;
+					};
+
+					const onRestart = (e) => {
+						e.preventDefault();
+						console.warn("[onRestart]");
+						currentStep.value = 0;
+						score.value = 0;
+					};
+
+					return {
+						arQuestions,
+						arAnswersCorrect,
+						score,
+						currentAnswer,
+						currentStep,
+						onSubmitAnswer,
+						onRestart,
+					};
+				},
+			}).mount("#app");
+		</script>
+	</body>
+</html>

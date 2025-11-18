@@ -30,13 +30,21 @@
 
 	<body>
 		<div id="app">
-			<div v-on:click="changeName">{{message}} | {{age}}</div>
-			<div v-on:click="changeName">
+			<div>
+				<label>Enter your age:</label>
+				<input
+					v-model="age"
+					type="text"
+					name=""
+					id="age"
+				/>
+			</div>
+			<div v-on:click="">
 				Can you drive ?
 				<span
 					:class="{ 
-						can: canDrive === 'YES',
-						cannot: canDrive !== 'YES'
+						'can': canDrive === 'YES',
+						'cannot': canDrive !== 'YES'
 					}"
 					>{{canDrive}}</span
 				>
