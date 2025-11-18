@@ -17,14 +17,30 @@
 				padding: 20px;
 				font-size: 2em;
 			}
+
+			.can {
+				color: green;
+			}
+			.cannot {
+				color: brown;
+			}
 		</style>
 		<script src="https://unpkg.com/vue@3.4.0"></script>
 	</head>
 
 	<body>
 		<div id="app">
-			<div v-on:click="changeName">{{message}} - {{age}}</div>
-			<div v-on:click="changeName">Can you drive ? {{canDrive}}</div>
+			<div v-on:click="changeName">{{message}} | {{age}}</div>
+			<div v-on:click="changeName">
+				Can you drive ?
+				<span
+					:class="{ 
+						can: canDrive === 'YES',
+						cannot: canDrive !== 'YES'
+					}"
+					>{{canDrive}}</span
+				>
+			</div>
 		</div>
 		<script>
 			const { createApp, ref, computed } = Vue;
@@ -34,8 +50,8 @@
 					let age = ref(null);
 					let canDrive = computed(() => {
 						console.log("[computed]..", `AGE: ${age.value}`);
-						message.value = age.value > 70 ? "véi" : message.value;
-						return age.value > 18 ? "yes" : "no";
+						message.value = age.value > 70 ? "Senior DL" : message.value;
+						return age.value > 18 ? "YES" : "NO";
 					});
 
 					return { message, canDrive, age };
@@ -46,8 +62,8 @@
 				methods: {
 					changeName() {
 						console.log("OPA");
-						this.message = this.message + "2e";
-						this.age = this.age + 26;
+						this.message = `Age.`;
+						this.age = this.age + 16;
 
 						console.log("AGE [", this.age, "]");
 					},
