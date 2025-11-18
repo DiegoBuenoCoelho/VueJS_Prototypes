@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>VUE 3 Example</title>
+		<script src="https://unpkg.com/vue@3"></script>
+	</head>
+	<body>
+		<div id="app">
+			MA {{name}} COUNTER
+			<p>Counter: {{counter}}</p>
+			<button @click="counter--">Remove</button>
+			<button @click="counter++">Add</button>
+			<div v-if="counter > 6">CALMAEEE</div>
+		</div>
+
+		<script>
+			const { createApp, ref } = Vue;
+			createApp({
+				setup() {
+					const counter = ref(0);
+					const name = "Jaspion";
+
+					return { counter, name };
+				},
+			}).mount("#app");
+		</script>
+	</body>
+</html>
