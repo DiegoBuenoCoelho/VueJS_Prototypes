@@ -28,18 +28,18 @@
 		<div id="app">
 			<label>Your Score: <span>{{score}}</span></label>
 			<label
-				v-if="currentStep <= 2"
+				v-if="!areWeDone"
 				:class="{'pergunta' : true}"
 			>
 				{{arQuestions[currentStep]}}</label
 			>
 			<label
-				v-if="currentStep > 2"
+				v-if="areWeDone"
 				:class="{'fim' : true}"
 				>FINISHED</label
 			>
 			<input
-				v-if="currentStep < 3"
+				v-if="!areWeDone"
 				type="text"
 				name=""
 				id=""
@@ -47,44 +47,60 @@
 				@keyup.enter="onSubmitAnswer"
 			/>
 			<button
-				v-if="currentStep < 3"
+				v-if="!areWeDone"
 				@click="onSubmitAnswer"
 			>
 				Submit Answer
 			</button>
 			<button
-				v-if="currentStep > 2"
+				v-if="areWeDone"
 				@click="onRestart"
 			>
 				RESTART
 			</button>
 		</div>
 		<script>
-			const { createApp, ref } = Vue;
+			const { createApp, ref, computed } = Vue;
 			createApp({
 				setup() {
 					const arQuestions = [
 						"Qual melhor time?",
 						"Qual melhor cachorro?",
 						"Qual maior ladrao?",
+						"Seu Nome?",
 					];
-					const arAnswersCorrect = ["Fluminense", "Chewbacca", "Lula"];
+					const arAnswersCorrect = ["Fluminense", "Chewbacca", "Lula", "Diego"];
 					let score = ref(0);
 					let currentStep = ref(0);
 					let currentAnswer = ref("");
+
+					let areWeDone = computed(() => {
+						return Boolean(currentStep.value === arQuestions.length);
+					});
 
 					const onSubmitAnswer = (e) => {
 						e.preventDefault();
 						console.log(
 							`[onSubmitAnswer]`,
 							currentAnswer.value,
+							arAnswersCorrect[currentStep.value],
 							currentStep.value,
-							arAnswersCorrect[currentStep.value]
+							arQuestions.length,
+							areWeDone.value
 						);
 
 						if (currentAnswer.value === arAnswersCorrect[currentStep.value]) {
 							score.value++;
 						}
+						// debugger;
+						// console.log(
+						// 	"areWeDone? ",
+						// 	currentStep.value,
+						// 	arQuestions.length - 1,
+						// 	Boolean(
+						// 		parseInt(currentStep.value) === parseInt(arQuestions.length)
+						// 	)
+						// );
 
 						currentAnswer.value = "";
 						currentStep.value++;
@@ -92,7 +108,7 @@
 
 					const onRestart = (e) => {
 						e.preventDefault();
-						console.warn("[onRestart]");
+						// console.warn("[onRestart]");
 						currentStep.value = 0;
 						score.value = 0;
 					};
@@ -103,6 +119,7 @@
 						score,
 						currentAnswer,
 						currentStep,
+						areWeDone,
 						onSubmitAnswer,
 						onRestart,
 					};
